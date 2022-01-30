@@ -1,7 +1,11 @@
 from pathlib import Path
-import os
-BASE_DIR = Path(__file__).resolve().parent.parent
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z@vtd(bpoj^fq3yrh2t+!l%$z&h*1ph^2!)*y$hlme6$a4-^w8'
 templateDir = os.path.join("templates")
 
@@ -19,9 +23,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'users.apps.UsersConfig',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ORIGIN_WHITELIST = (
+#     'http//:localhost:8000',
+# )
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,8 +73,12 @@ WSGI_APPLICATION = 'server.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('db_name'),
+        'USER': env('db_user'),
+        'PASSWORD': env('db_password'),
+        'HOST': 'localhost',
+        'PORT': env('port')
     }
 }
 
@@ -94,7 +114,15 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+<<<<<<< HEAD
 STATICFILES_DIRS = [
     "server/static"
 ]
+=======
+AUTH_USER_MODEL = 'users.User'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+>>>>>>> a53e8fb701f06cfa2051eb71b7d28c05456a5733
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
