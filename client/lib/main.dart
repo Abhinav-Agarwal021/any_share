@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:html';
+// import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dashboard.dart';
 
 void main() {
-  runApp(const Dashboard());
+  runApp(const SignupRoute());
 }
 
 class LoginRoute extends StatelessWidget {
@@ -115,10 +115,13 @@ class SignupFormState extends State<SignupForm> {
     String username = _unameController.text;
     String password = _passController.text;
     String email = _emailController.text;
-    String uri = "http://127.0.0.1:8000/register";
-    var data = {"username": username, "password": password, "email": email};
+    String uri = "http://127.0.0.1:8000/api/register/";
+    var data = {"name": username, "password": password, "email": email};
     var response = await post(Uri.parse(uri),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
     String resb = response.body;
@@ -172,7 +175,7 @@ class LoginFormState extends State<LoginForm> {
   }
 
   void login() async {
-    String uri = "http://127.0.0.1:8000/login";
+    String uri = "http://127.0.0.1:8000/api/login";
     String email = _email.text;
     String password = _password.text;
     var data = {"email": email, "password": password};

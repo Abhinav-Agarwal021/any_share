@@ -7,7 +7,7 @@ environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z@vtd(bpoj^fq3yrh2t+!l%$z&h*1ph^2!)*y$hlme6$a4-^w8'
-templateDir = os.path.join("templates")
+# templateDir = os.path.join("templates")
 
 DEBUG = True
 
@@ -52,7 +52,7 @@ ROOT_URLCONF = 'server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [templateDir],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -114,15 +114,9 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-<<<<<<< HEAD
-STATICFILES_DIRS = [
-    "server/static"
-]
-=======
 AUTH_USER_MODEL = 'users.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
->>>>>>> a53e8fb701f06cfa2051eb71b7d28c05456a5733
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
