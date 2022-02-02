@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'dashboard.dart';
 
 void main() {
-  runApp(const SignupRoute());
+  runApp(const Dashboard());
 }
 
 class LoginRoute extends StatelessWidget {
