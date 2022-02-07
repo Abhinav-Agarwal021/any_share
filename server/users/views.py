@@ -11,8 +11,10 @@ import datetime
 class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
+        print(request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        print("REGISTERRRRRRRRRRRR")
         return Response(serializer.data)
 
 
@@ -28,7 +30,7 @@ class LoginView(APIView):
 
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password!')
-
+        print("LOGINNNNNNNNNNNNNNNN")
         payload = {
             'id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),

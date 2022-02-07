@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-z@vtd(bpoj^fq3yrh2t+!l%$z&h*1ph^2!)*y$hlme6$a4-^w8
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','10.0.2.2']
 
 
 # Application definition
