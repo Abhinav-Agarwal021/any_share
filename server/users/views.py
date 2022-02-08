@@ -14,7 +14,6 @@ class RegisterView(APIView):
         print(request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        print("REGISTERRRRRRRRRRRR")
         return Response(serializer.data)
 
 
@@ -30,7 +29,6 @@ class LoginView(APIView):
 
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password!')
-        print("LOGINNNNNNNNNNNNNNNN")
         payload = {
             'id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
@@ -38,7 +36,7 @@ class LoginView(APIView):
         }
 
         token = jwt.encode(payload, 'secret',
-                           algorithm='HS256').decode('utf-8')
+                           algorithm='HS256')
 
         response = Response()
 
