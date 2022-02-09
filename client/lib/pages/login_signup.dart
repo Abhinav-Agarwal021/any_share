@@ -1,7 +1,9 @@
 import 'dart:convert';
 // import 'dart:html';
+import 'package:client/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginRoute extends StatelessWidget {
   const LoginRoute({Key? key}) : super(key: key);
@@ -168,6 +170,7 @@ class LoginFormState extends State<LoginForm> {
 
   void login() async {
     String uri = "http://10.0.2.2:8000/api/login/";
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String email = _email.text;
     String password = _password.text;
     var data = {"email": email, "password": password};
@@ -177,5 +180,16 @@ class LoginFormState extends State<LoginForm> {
         encoding: Encoding.getByName("utf-8"));
     String resb = response.body;
     debugPrint(resb);
+    var jsonResponse;
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+    }
+
+    if (jsonResponse != null) {
+      sharedPreferences.setString("jwt", jsonResponse['jwt']);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Dashboard()));
+    }
   }
 }
