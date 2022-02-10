@@ -14,8 +14,9 @@ class RegisterView(APIView):
         print(request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        print("REGISTERRRRRRRRRRRR")
-        return Response(serializer.data)
+        response = Response()
+        response.data = "success"
+        return response
 
 
 class LoginView(APIView):
@@ -30,7 +31,6 @@ class LoginView(APIView):
 
         if not user.check_password(password):
             raise AuthenticationFailed('Incorrect password!')
-        print("LOGINNNNNNNNNNNNNNNN")
         payload = {
             'id': user.id,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
@@ -38,7 +38,7 @@ class LoginView(APIView):
         }
 
         token = jwt.encode(payload, 'secret',
-                           algorithm='HS256').decode('utf-8')
+                           algorithm='HS256')
 
         response = Response()
 
@@ -51,14 +51,11 @@ class LoginView(APIView):
 
 class UserView(APIView):
 
-    def get(self, request):
-        token = request.COOKIES.get('jwt')
+    def post(self, request):
 
-        if not token:
-            raise AuthenticationFailed('Unauthenticated!')
-
+        token = request.data['token']
         try:
-            payload = jwt.decode(token, 'secret', algorithm=['HS256'])
+            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Unauthenticated!')
 

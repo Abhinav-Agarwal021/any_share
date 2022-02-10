@@ -1,187 +1,73 @@
-import 'dart:convert';
-// import 'dart:html';
+import 'package:client/pages/chats.dart';
+import 'package:client/pages/dashboard.dart';
+import 'package:client/pages/login_signup.dart';
+import 'package:client/utils/routes.dart';
 import 'package:flutter/material.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart';
-import 'dashboard.dart';
-import 'chats.dart';
+import 'dart:convert';
 
-void main() {
-  runApp(const Chats());
+var userData;
+
+void main() async {
+  runApp(const MyApp());
 }
 
-class LoginRoute extends StatelessWidget {
-  const LoginRoute({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    const title = "Login";
-    return MaterialApp(
-      title: title,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(title),
-        ),
-        body: const LoginForm(),
-      ),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class SignupRoute extends StatelessWidget {
-  const SignupRoute({Key? key}) : super(key: key);
+class _MyAppState extends State<MyApp> {
   @override
-  Widget build(BuildContext context) {
-    const title = "Signup";
-    return MaterialApp(
-        title: title,
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(title),
-          ),
-          body: const SignupForm(),
-        ));
-  }
-}
-
-class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
-  @override
-  LoginFormState createState() {
-    return LoginFormState();
-  }
-}
-
-class SignupForm extends StatefulWidget {
-  const SignupForm({Key? key}) : super(key: key);
-  @override
-  SignupFormState createState() {
-    return SignupFormState();
-  }
-}
-
-class SignupFormState extends State<SignupForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _unameController = TextEditingController();
-  final _passController = TextEditingController();
-  final _emailController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextFormField(
-            controller: _unameController,
-            decoration: const InputDecoration(
-                hintText: "Enter your name",
-                contentPadding: EdgeInsets.all(5.0)),
-          ),
-          TextFormField(
-            controller: _passController,
-            decoration: const InputDecoration(
-                hintText: "Enter your password",
-                contentPadding: EdgeInsets.all(5.0)),
-          ),
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-                hintText: "Enter your email",
-                contentPadding: EdgeInsets.all(5.0)),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: ElevatedButton(
-              child: const Text("Submit"),
-              onPressed: signup,
-            ),
-          ),
-          TextButton(
-              onPressed: switchToLogin,
-              child: const Text("Already have an account? Login"))
-        ],
-      ),
-    );
+  void initState() {
+    getAuthentication().whenComplete(() async {
+      print("CCCCCCCCCCCCCCCCCCCCCCCCC1");
+      print(userData);
+      print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  userData == null ? const SignupRoute() : const Dashboard()));
+    });
+    super.initState();
   }
 
-  void switchToLogin() {
-    Navigator.pop(context);
+  Future getAuthentication() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const LoginRoute()));
-  }
+    var obtainData = sharedPreferences.getString("jwt");
 
-  void signup() async {
-    String username = _unameController.text;
-    String password = _passController.text;
-    String email = _emailController.text;
-    String uri = "http://10.0.2.2:8000/api/register/";
-    var data = {"name": username, "password": password, "email": email};
+    String uri = "http://10.0.2.2:8000/api/user/";
+    var data = {"token": obtainData};
     var response = await post(Uri.parse(uri),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
     String resb = response.body;
     debugPrint(resb);
+    setState(() {
+      userData = response.body;
+    });
+    debugPrint("AAAAAAAAAAAAAAA1");
+    debugPrint(userData);
+    debugPrint("BBBBBBBBBBBB1");
   }
-}
 
-class LoginFormState extends State<LoginForm> {
-  final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController();
-  final _password = TextEditingController();
-  @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextFormField(
-            controller: _email,
-            decoration: const InputDecoration(
-                hintText: "Enter your email",
-                contentPadding: EdgeInsets.all(5.0)),
-          ),
-          TextFormField(
-            controller: _password,
-            decoration: const InputDecoration(
-                hintText: "Enter password",
-                contentPadding: EdgeInsets.all(5.0)),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: ElevatedButton(
-              onPressed: login,
-              child: const Text("Submit"),
-            ),
-          ),
-          TextButton(
-              onPressed: switchToSignup,
-              child: const Text("Do not have account? Signup"))
-        ],
-      ),
+    return MaterialApp(
+      initialRoute: "/dashboard",
+      routes: {
+        "/": (context) => const SignupRoute(),
+        MyRoutes.dashboard: (context) => const Dashboard(),
+        MyRoutes.signupRoute: (context) => const SignupRoute(),
+        MyRoutes.chat: (context) => const Chats()
+      },
     );
-  }
-
-  void switchToSignup() {
-    Navigator.pop(context);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const SignupRoute()));
-  }
-
-  void login() async {
-    String uri = "http://10.0.2.2:8000/api/login/";
-    String email = _email.text;
-    String password = _password.text;
-    var data = {"email": email, "password": password};
-    var response = await post(Uri.parse(uri),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(data),
-        encoding: Encoding.getByName("utf-8"));
-    String resb = response.body;
-    debugPrint(resb);
   }
 }
