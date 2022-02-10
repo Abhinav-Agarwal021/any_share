@@ -4,6 +4,7 @@ import 'package:client/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
 class LoginRoute extends StatelessWidget {
   const LoginRoute({Key? key}) : super(key: key);
@@ -119,7 +120,14 @@ class SignupFormState extends State<SignupForm> {
         body: jsonEncode(data),
         encoding: Encoding.getByName("utf-8"));
     String resb = response.body;
-    debugPrint(resb);
+    if (resb == '"success"') {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Signup successful"),
+        duration: Duration(seconds: 5),
+      ));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const LoginRoute()));
+    }
   }
 }
 

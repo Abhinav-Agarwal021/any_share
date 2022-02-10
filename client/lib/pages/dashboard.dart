@@ -1,4 +1,6 @@
+import 'package:client/pages/login_signup.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -23,6 +25,13 @@ class DashContainer extends StatefulWidget {
 }
 
 class DashState extends State<DashContainer> {
+  void handleLogout() async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.clear();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const SignupRoute()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -60,7 +69,11 @@ class DashState extends State<DashContainer> {
             children: [
               ElevatedButton(onPressed: () {}, child: const Text("Friends")),
               ElevatedButton(onPressed: () {}, child: const Text("Chat")),
-              ElevatedButton(onPressed: () {}, child: const Text("Settings"))
+              ElevatedButton(onPressed: () {}, child: const Text("Settings")),
+              ElevatedButton(
+                onPressed: handleLogout,
+                child: const Text("Logout"),
+              )
             ],
           )
         ],

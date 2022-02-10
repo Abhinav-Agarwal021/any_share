@@ -10,7 +10,7 @@ import 'dart:convert';
 
 var userData;
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -25,7 +25,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getAuthentication().whenComplete(() async {
-      Navigator.pop(context);
+      print("CCCCCCCCCCCCCCCCCCCCCCCCC1");
+      print(userData);
+      print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -49,17 +51,17 @@ class _MyAppState extends State<MyApp> {
         encoding: Encoding.getByName("utf-8"));
     String resb = response.body;
     debugPrint(resb);
-
     setState(() {
       userData = response.body;
     });
-
+    debugPrint("AAAAAAAAAAAAAAA1");
     debugPrint(userData);
+    debugPrint("BBBBBBBBBBBB1");
   }
 
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/",
+      initialRoute: "/dashboard",
       routes: {
         "/": (context) => const SignupRoute(),
         MyRoutes.dashboard: (context) => const Dashboard(),
