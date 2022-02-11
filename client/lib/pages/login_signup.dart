@@ -60,6 +60,7 @@ class SignupFormState extends State<SignupForm> {
   final _unameController = TextEditingController();
   final _passController = TextEditingController();
   final _emailController = TextEditingController();
+  final _x = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +105,6 @@ class SignupFormState extends State<SignupForm> {
 
   void switchToLogin() {
     Navigator.pop(context);
-
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const LoginRoute()));
   }
