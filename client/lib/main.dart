@@ -3,14 +3,14 @@ import 'package:client/pages/dashboard.dart';
 import 'package:client/pages/login_signup.dart';
 import 'package:client/utils/routes.dart';
 import 'package:flutter/material.dart';
-
+import 'package:client/pages/messages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
 var userData;
 
-void main() async {
+void main() {
   runApp(const MyApp());
 }
 
@@ -25,9 +25,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getAuthentication().whenComplete(() async {
-      print("CCCCCCCCCCCCCCCCCCCCCCCCC1");
-      print(userData);
-      print("DDDDDDDDDDDDDDDDDDDDDDDDDDDDd");
+      Navigator.pop(context);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -51,22 +49,23 @@ class _MyAppState extends State<MyApp> {
         encoding: Encoding.getByName("utf-8"));
     String resb = response.body;
     debugPrint(resb);
+
     setState(() {
       userData = response.body;
     });
-    debugPrint("AAAAAAAAAAAAAAA1");
+
     debugPrint(userData);
-    debugPrint("BBBBBBBBBBBB1");
   }
 
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: "/dashboard",
+      initialRoute: "/",
       routes: {
-        "/": (context) => const SignupRoute(),
+        "/": (context) => const Messages(),
         MyRoutes.dashboard: (context) => const Dashboard(),
         MyRoutes.signupRoute: (context) => const SignupRoute(),
-        MyRoutes.chat: (context) => const Chats()
+        MyRoutes.chat: (context) => const Chats(),
+        MyRoutes.messages: (context) => const Messages()
       },
     );
   }
