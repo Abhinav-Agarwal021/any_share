@@ -8,15 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
-// void main() async {
-//   final SharedPreferences sharedPreferences =
-//       await SharedPreferences.getInstance();
-
-//   var obtainData = sharedPreferences.getString("jwt");
-//   debugPrint(obtainData);
-//   runApp(obtainData == null ? const SignupRoute() : const Dashboard());
-// }
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
