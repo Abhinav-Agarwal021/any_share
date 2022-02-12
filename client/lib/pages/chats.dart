@@ -1,3 +1,4 @@
+import 'package:client/pages/messages.dart';
 import 'package:flutter/material.dart';
 
 class Chats extends StatelessWidget {
@@ -29,7 +30,7 @@ class ChatContainer extends StatefulWidget {
 }
 
 class ChatState extends State<ChatContainer> {
-  final chatCount = 15; // to be fetched from the server
+  final chatCount = 25; // to be fetched from the server
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -37,7 +38,11 @@ class ChatState extends State<ChatContainer> {
       children: [
         for (var i = 1; i <= chatCount; i++)
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Messages()));
+            },
             child: Text(
               "Chat $i",
               style: const TextStyle(fontSize: 17),

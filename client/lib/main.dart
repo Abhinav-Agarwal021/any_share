@@ -19,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
         "/": (context) => const SignupRoute(),
@@ -45,8 +46,6 @@ Future<void> main() async {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
       encoding: Encoding.getByName("utf-8"));
-  var resb = response.body;
-  debugPrint(resb);
   var userData;
 
   if (response.statusCode == 200) {

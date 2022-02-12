@@ -63,8 +63,7 @@ class MessageState extends State<MessageContainer> {
   // if in case a user sends multiple messages , create one array and store those multiple messages there
 
   Widget build(BuildContext context) {
-    return Column(children: [
-      SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           children: [
             for (var i = 0; i < messageList!.length; i++)
@@ -92,8 +91,7 @@ class MessageState extends State<MessageContainer> {
                       )
                     ])
           ],
-        ),
       ),
-    ]);
+    );
   }
 }
