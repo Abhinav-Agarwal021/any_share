@@ -125,8 +125,27 @@ class SignupFormState extends State<SignupForm> {
         content: Text("Signup successful"),
         duration: Duration(seconds: 5),
       ));
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => const LoginRoute()));
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var data = {"email": email, "password": password};
+    var response = await post(Uri.parse("http://10.0.2.2:8000/api/login/"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+        encoding: Encoding.getByName("utf-8"));
+    String resb = response.body;
+    debugPrint(resb);
+    var jsonResponse;
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+    }
+
+    if (jsonResponse != null) {
+      sharedPreferences.setString("jwt", jsonResponse['jwt']);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const LoginRoute()));
+          context, MaterialPageRoute(builder: (context) => const Dashboard()));
+    }
     }
   }
 }
