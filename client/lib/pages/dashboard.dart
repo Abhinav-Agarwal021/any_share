@@ -71,7 +71,6 @@ class DashState extends State<DashContainer> {
               ElevatedButton(onPressed: () {}, child: const Text("Friends")),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => const Chats()));
                   },

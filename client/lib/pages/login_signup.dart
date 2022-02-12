@@ -104,7 +104,6 @@ class SignupFormState extends State<SignupForm> {
   }
 
   void switchToLogin() {
-    Navigator.pop(context);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const LoginRoute()));
   }
@@ -191,7 +190,6 @@ class LoginFormState extends State<LoginForm> {
   }
 
   void switchToSignup() {
-    Navigator.pop(context);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const SignupRoute()));
   }
