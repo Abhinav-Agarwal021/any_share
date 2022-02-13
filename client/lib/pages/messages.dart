@@ -1,5 +1,6 @@
 import 'dart:ui';
-
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class Messages extends StatelessWidget {
@@ -64,33 +65,32 @@ class MessageState extends State<MessageContainer> {
 
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-          children: [
-            for (var i = 0; i < messageList!.length; i++)
-              for (var j = 0; j < messageList![i].length; j++)
-                Row(
-                    mainAxisAlignment: i % 2 == 0
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        decoration: BoxDecoration(
-                            color: i % 2 == 0 ? Colors.amber : Colors.cyan,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Text(
-                          messageList![i][j],
-                          style: TextStyle(
-                              fontSize: 20,
-                              color:
-                                  i % 2 == 0 ? Colors.red : Colors.deepPurple),
-                        ),
-                      )
-                    ])
-          ],
+      child: Column(
+        children: [
+          for (var i = 0; i < messageList!.length; i++)
+            for (var j = 0; j < messageList![i].length; j++)
+              Row(
+                  mainAxisAlignment: i % 2 == 0
+                      ? MainAxisAlignment.end
+                      : MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 5),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 5),
+                      decoration: BoxDecoration(
+                          color: i % 2 == 0 ? Colors.amber : Colors.cyan,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text(
+                        messageList![i][j],
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: i % 2 == 0 ? Colors.red : Colors.deepPurple),
+                      ),
+                    )
+                  ])
+        ],
       ),
     );
   }
