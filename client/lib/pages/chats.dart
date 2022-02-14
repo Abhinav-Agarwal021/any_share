@@ -39,8 +39,8 @@ class ChatState extends State<ChatContainer> {
         for (var i = 1; i <= chatCount; i++)
           ElevatedButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const Messages()));
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Messages()));
             },
             child: Text(
               "Chat $i",

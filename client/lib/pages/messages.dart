@@ -1,12 +1,15 @@
 import 'dart:ui';
-
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Messages extends StatelessWidget {
-  const Messages({Key? key}) : super(key: key);
+  Messages({Key? key}) : super(key: key);
+
   final String chatName =
       "shady"; // to be changed according to the data received from backend
-
+  final messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,13 +20,6 @@ class Messages extends StatelessWidget {
           title: Text(chatName),
         ),
         body: const MessageContainer(),
-        bottomNavigationBar: const TextField(
-          decoration: InputDecoration(
-              filled: true,
-              fillColor: Color.fromRGBO(3, 35, 139, 100),
-              hintStyle: TextStyle(fontSize: 20),
-              hintText: "Enter your message"),
-        ),
       ),
     );
   }
@@ -41,7 +37,9 @@ class MessageContainer extends StatefulWidget {
 class MessageState extends State<MessageContainer> {
   late Map<String, List<List<String>>> previousMessages;
   late List<List<String>>? messageList;
-
+  var channel;
+  final messageController = TextEditingController();
+  final scrollController = ScrollController();
   MessageState() {
     previousMessages = {
       "messages": [
@@ -53,9 +51,22 @@ class MessageState extends State<MessageContainer> {
         ["theirMsg3"],
         ["ourMsg4"],
         ["theirMsg4", "theirMsg4Alt"],
+        ["ourMsg5", "ourMsg5Alt"],
+        ["theirMsg6", "theirMsg6Alt"],
+        ["ourMsg7", "ourMsg7Alt"],
+        ["theirMsg8", "theirMsg8Alt"],
       ],
     };
     messageList = previousMessages["messages"]?.toList();
+  }
+  @override
+  void initState() {
+    super.initState();
+    channel = WebSocketChannel.connect(
+      Uri.parse('wss://echo.websocket.org'),
+    );
+
+    // scrollController.jumpTo(10);
   }
 
   @override
@@ -64,34 +75,55 @@ class MessageState extends State<MessageContainer> {
 
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-          children: [
-            for (var i = 0; i < messageList!.length; i++)
-              for (var j = 0; j < messageList![i].length; j++)
-                Row(
-                    mainAxisAlignment: i % 2 == 0
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 5),
-                        decoration: BoxDecoration(
-                            color: i % 2 == 0 ? Colors.amber : Colors.cyan,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Text(
-                          messageList![i][j],
-                          style: TextStyle(
-                              fontSize: 20,
-                              color:
-                                  i % 2 == 0 ? Colors.red : Colors.deepPurple),
-                        ),
-                      )
-                    ])
-          ],
+      controller: scrollController,
+      child: Column(
+        children: [
+          for (var i = 0; i < messageList!.length; i++)
+            for (var j = 0; j < messageList![i].length; j++)
+              Row(
+                  mainAxisAlignment: i % 2 == 0
+                      ? MainAxisAlignment.end
+                      : MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 5),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 5),
+                      decoration: BoxDecoration(
+                          color: i % 2 == 0 ? Colors.amber : Colors.cyan,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Text(
+                        messageList![i][j],
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: i % 2 == 0 ? Colors.red : Colors.deepPurple),
+                      ),
+                    ),
+                  ]),
+          Row(children: [
+            Flexible(
+                child: SizedBox(
+                    height: 50,
+                    child: TextFormField(
+                      controller: messageController,
+                      decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: Color.fromRGBO(3, 35, 139, 100),
+                          hintStyle: TextStyle(fontSize: 20),
+                          hintText: "Enter your message"),
+                    ))),
+            SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: sendMessage, child: const Text("Send")))
+          ])
+        ],
       ),
     );
+  }
+
+  void sendMessage() {
+    channel.sink.add(messageController.text);
   }
 }
