@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Chats</title>
+   <style>
+       #chatbox{
+           width: 100vw;
+       }
+   </style>
+</head>
+<body class="bg-black">
+    <div id="main">
+   <div id="mainCont" style="max-height: 94vh;" class="overflow-y-auto"></div> 
+   <div id="chatbox" class="mt-5 fixed bottom-0">
+       <input type="text" name="msg" id="msg" style="width: 85%;" class="ml-2">
+       <button id="send" style="width: 10%;" class="bg-white">Send</button>
+   </div>
+</div>
+<script src="/static/static/js/chats.js"></script>
+</body>
+</html>
