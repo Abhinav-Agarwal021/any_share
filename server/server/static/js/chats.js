@@ -16,7 +16,6 @@ var previousMessages = {
       ["ourMsg5", "ourMsg5Alt"],
       ["theirMsg6", "theirMsg6Alt"],
       ["ourMsg7", "ourMsg7Alt"],
-      ["theirMsg8", "theirMsg8Alt","theirMsg8", "theirMsg8Alt"],
     ],
   };
 

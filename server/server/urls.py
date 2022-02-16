@@ -4,5 +4,6 @@ from .views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('users.urls')),
-    path('chats/<key>',index)
+    path('chats/<key>',index),
+    path('api/chat/', include('chat.urls'))
 ]
