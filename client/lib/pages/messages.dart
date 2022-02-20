@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class Messages extends StatelessWidget {
   Messages({Key? key}) : super(key: key);
@@ -40,6 +41,7 @@ class MessageState extends State<MessageContainer> {
   var channel;
   final messageController = TextEditingController();
   final scrollController = ScrollController();
+  @override
   MessageState() {
     previousMessages = {
       "messages": [
@@ -65,6 +67,7 @@ class MessageState extends State<MessageContainer> {
     channel = WebSocketChannel.connect(
       Uri.parse('wss://echo.websocket.org'),
     );
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
 
     // scrollController.jumpTo(10);
   }
@@ -74,53 +77,57 @@ class MessageState extends State<MessageContainer> {
   // if in case a user sends multiple messages , create one array and store those multiple messages there
 
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: scrollController,
-      child: Column(
-        children: [
-          for (var i = 0; i < messageList!.length; i++)
-            for (var j = 0; j < messageList![i].length; j++)
-              Row(
-                  mainAxisAlignment: i % 2 == 0
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 5),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 5),
-                      decoration: BoxDecoration(
-                          color: i % 2 == 0 ? Colors.amber : Colors.cyan,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Text(
-                        messageList![i][j],
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: i % 2 == 0 ? Colors.red : Colors.deepPurple),
-                      ),
-                    ),
-                  ]),
-          Row(children: [
-            Flexible(
-                child: SizedBox(
-                    height: 50,
-                    child: TextFormField(
-                      controller: messageController,
-                      decoration: const InputDecoration(
-                          filled: true,
-                          fillColor: Color.fromRGBO(3, 35, 139, 100),
-                          hintStyle: TextStyle(fontSize: 20),
-                          hintText: "Enter your message"),
-                    ))),
-            SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: sendMessage, child: const Text("Send")))
-          ])
-        ],
-      ),
+    return const WebView(
+      initialUrl: 'https://backdoor.sdslabs.co',
+      javascriptMode: JavascriptMode.unrestricted,
     );
+    // return SingleChildScrollView(
+    //   controller: scrollController,
+    //   child: Column(
+    //     children: [
+    //       for (var i = 0; i < messageList!.length; i++)
+    //         for (var j = 0; j < messageList![i].length; j++)
+    //           Row(
+    //               mainAxisAlignment: i % 2 == 0
+    //                   ? MainAxisAlignment.end
+    //                   : MainAxisAlignment.start,
+    //               children: [
+    //                 Container(
+    //                   margin: const EdgeInsets.symmetric(
+    //                       vertical: 5, horizontal: 5),
+    //                   padding: const EdgeInsets.symmetric(
+    //                       vertical: 5, horizontal: 5),
+    //                   decoration: BoxDecoration(
+    //                       color: i % 2 == 0 ? Colors.amber : Colors.cyan,
+    //                       borderRadius: BorderRadius.circular(10)),
+    //                   child: Text(
+    //                     messageList![i][j],
+    //                     style: TextStyle(
+    //                         fontSize: 20,
+    //                         color: i % 2 == 0 ? Colors.red : Colors.deepPurple),
+    //                   ),
+    //                 ),
+    //               ]),
+    //       Row(children: [
+    //         Flexible(
+    //             child: SizedBox(
+    //                 height: 50,
+    //                 child: TextFormField(
+    //                   controller: messageController,
+    //                   decoration: const InputDecoration(
+    //                       filled: true,
+    //                       fillColor: Color.fromRGBO(3, 35, 139, 100),
+    //                       hintStyle: TextStyle(fontSize: 20),
+    //                       hintText: "Enter your message"),
+    //                 ))),
+    //         SizedBox(
+    //             height: 50,
+    //             child: ElevatedButton(
+    //                 onPressed: sendMessage, child: const Text("Send")))
+    //       ])
+    //     ],
+    //   ),
+    // );
   }
 
   void sendMessage() {
