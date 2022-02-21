@@ -51,5 +51,6 @@ Future<void> main() async {
   if (response.statusCode == 200) {
     userData = response.body;
   }
-  runApp(MaterialApp(home: userData == null ? Messages() : Messages()));
+  runApp(MaterialApp(
+      home: userData == null ? const Dashboard() : const Dashboard()));
 }

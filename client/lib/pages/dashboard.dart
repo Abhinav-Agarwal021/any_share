@@ -1,5 +1,6 @@
 import 'package:client/pages/chats.dart';
 import 'package:client/pages/login_signup.dart';
+import 'package:client/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,7 +77,14 @@ class DashState extends State<DashContainer> {
                         MaterialPageRoute(builder: (context) => const Chats()));
                   },
                   child: const Text("Chat")),
-              ElevatedButton(onPressed: () {}, child: const Text("Settings")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Settings()));
+                  },
+                  child: const Text("Settings")),
               ElevatedButton(
                 onPressed: handleLogout,
                 child: const Text("Logout"),
