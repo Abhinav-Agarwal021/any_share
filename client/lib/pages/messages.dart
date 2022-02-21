@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:io';
 import 'dart:async';
+import 'package:client/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:webview_flutter/webview_flutter.dart';
