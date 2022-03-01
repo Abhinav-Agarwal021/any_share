@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
-        "/": (context) => Messages(),
+        "/": (context) => const SignupRoute(),
         MyRoutes.dashboard: (context) => const Dashboard(),
         MyRoutes.signupRoute: (context) => const SignupRoute(),
         MyRoutes.chat: (context) => const Chats(),
@@ -52,5 +52,5 @@ Future<void> main() async {
     userData = response.body;
   }
   runApp(MaterialApp(
-      home: userData == null ? const Dashboard() : const Dashboard()));
+      home: userData == null ? const SignupRoute() : const Dashboard()));
 }
