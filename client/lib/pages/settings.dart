@@ -1,4 +1,7 @@
+import 'package:client/pages/friends.dart';
 import 'package:client/pages/messages.dart';
+import 'package:client/pages/modifyCreds.dart';
+import 'package:client/pages/transferHistory.dart';
 import 'package:flutter/material.dart';
 
 class Settings extends StatelessWidget {
@@ -31,10 +34,21 @@ class SettingsState extends State<SettingsContainer> {
     return ListView(
       children: [
         ElevatedButton(
-            onPressed: () {}, child: const Text("Modify credentials")),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const CredsRoute()));
+            },
+            child: const Text("Modify credentials")),
         ElevatedButton(onPressed: () {}, child: const Text("Privacy")),
         ElevatedButton(onPressed: () {}, child: const Text("Security")),
-        ElevatedButton(onPressed: () {}, child: const Text("Transfer History")),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const TransferRoute()));
+            },
+            child: const Text("Transfer History")),
         ElevatedButton(onPressed: () {}, child: const Text("Report Bugs"))
       ],
     );

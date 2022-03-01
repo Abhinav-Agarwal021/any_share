@@ -1,4 +1,5 @@
 import 'package:client/pages/chats.dart';
+import 'package:client/pages/friends.dart';
 import 'package:client/pages/login_signup.dart';
 import 'package:client/pages/settings.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,14 @@ class DashState extends State<DashContainer> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              ElevatedButton(onPressed: () {}, child: const Text("Friends")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const FriendsRoute()));
+                  },
+                  child: const Text("Friends")),
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
