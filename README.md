@@ -1,7 +1,5 @@
 # any_share
-A files or data or any app sharing app.
+An app for sharing any type of file.
 
-## Development Stuff -> Flutter, Django, PostgreSQL
-## Deployment -> Using docker, docker-compose
-
-Todo -> Login/Signup, dashboard,..
+# Note on Sharing Files ->
+Files will be sent from frontend to backend and then uploaded to AWS S3 buckets from the backend. For download, the backend will download the file from AWS S3 first and then send it to frontend.

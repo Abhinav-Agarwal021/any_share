@@ -26,7 +26,8 @@ s3_url = upload_file("any-share","waifu.jpg")
 
 
 # Note that these are not publically accessible right now. Only the AWS account owner can view it. 
-# This needs to be fixed
+# Will make it publically accessible for download later
+
 
 # https://any-share.s3.amazonaws.com/waifu.jpg
 # https://any-share.s3.amazonaws.com/test.txt
