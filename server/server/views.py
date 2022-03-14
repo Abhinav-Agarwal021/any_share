@@ -21,3 +21,6 @@ def generateKey(user1,user2):
 def index(request,key):
     generateKey("shady","shadie")
     return render(request,"chats.html")
+
+def handleFileTransfer(request):
+    pass
