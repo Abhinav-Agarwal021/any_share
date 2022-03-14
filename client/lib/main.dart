@@ -22,7 +22,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
-        "/": (context) => const SignupRoute(),
+
+        "/": (context) => const LoginRoute(),
+
         MyRoutes.dashboard: (context) => const Dashboard(),
         MyRoutes.signupRoute: (context) => const SignupRoute(),
         MyRoutes.chat: (context) => const Chats(),
@@ -50,7 +52,8 @@ Future<void> main() async {
 
   if (response.statusCode == 200) {
     userData = response.body;
+    print(userData);
   }
   runApp(MaterialApp(
-      home: userData == null ? const SignupRoute() : const Dashboard()));
+      home: userData == '"Invalid"' ? const SignupRoute() : const Dashboard()));
 }

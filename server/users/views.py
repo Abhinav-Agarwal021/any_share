@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
@@ -5,11 +6,14 @@ from .serializers import UserSerializer
 from .models import User
 import jwt
 import datetime
-
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
 # Create your views here.
 class RegisterView(APIView):
     def post(self, request):
+        jwt_secret = env("jwt_secret")
         serializer = UserSerializer(data=request.data)
         print(request.data)
         serializer.is_valid(raise_exception=True)
@@ -21,6 +25,7 @@ class RegisterView(APIView):
 
 class LoginView(APIView):
     def post(self, request):
+        jwt_secret = env("jwt_secret")
         email = request.data['email']
         password = request.data['password']
 
@@ -33,11 +38,12 @@ class LoginView(APIView):
             raise AuthenticationFailed('Incorrect password!')
         payload = {
             'id': user.id,
+            'username':user.name,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
             'iat': datetime.datetime.utcnow()
         }
 
-        token = jwt.encode(payload, 'secret',
+        token = jwt.encode(payload, jwt_secret,
                            algorithm='HS256')
 
         response = Response()
@@ -52,16 +58,19 @@ class LoginView(APIView):
 class UserView(APIView):
 
     def post(self, request):
+        jwt_secret = env("jwt_secret")
 
         token = request.data['token']
         try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed('Unauthenticated!')
+            payload = jwt.decode(token, jwt_secret, algorithms=['HS256'])
+            user = User.objects.filter(id=payload['id']).first()
+            serializer = UserSerializer(user)
+            print(serializer.data)
+            return Response(serializer.data)
 
-        user = User.objects.filter(id=payload['id']).first()
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+        except Exception:
+            return Response("Invalid")
+        
 
 
 class LogoutView(APIView):
@@ -72,3 +81,11 @@ class LogoutView(APIView):
             'message': 'success'
         }
         return response
+
+class FileView(APIView):
+    def post(self,request,key):
+        print("POST")
+        jwt_secret = env("jwt_secret")
+        token = request.data['user1']
+        user1 = jwt.decode(token,key=jwt_secret,algorithms=["HS256"])
+        return HttpResponse("aaaa")

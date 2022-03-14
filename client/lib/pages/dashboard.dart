@@ -1,6 +1,8 @@
 import 'package:client/pages/chats.dart';
 import 'package:client/pages/friends.dart';
+import 'package:client/pages/localTransfer.dart';
 import 'package:client/pages/login_signup.dart';
+import 'package:client/pages/remoteTransfer.dart';
 import 'package:client/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,7 +48,12 @@ class DashState extends State<DashContainer> {
               padding: const EdgeInsets.only(top: 40, left: 10),
               child: ElevatedButton(
                 child: const Text("Transfer Locally"),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LocalTransferRoute()));
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(50, 100),
                 ),
@@ -56,7 +63,12 @@ class DashState extends State<DashContainer> {
               padding: const EdgeInsets.only(top: 40, left: 10),
               child: ElevatedButton(
                 child: const Text("Transfer Remotely"),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RemoteTransferRoute()));
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(40, 100),
                 ),
