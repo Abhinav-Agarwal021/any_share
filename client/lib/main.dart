@@ -22,7 +22,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
+
         "/": (context) => const LoginRoute(),
+
         MyRoutes.dashboard: (context) => const Dashboard(),
         MyRoutes.signupRoute: (context) => const SignupRoute(),
         MyRoutes.chat: (context) => const Chats(),
