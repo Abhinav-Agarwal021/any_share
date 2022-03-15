@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:file/file.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 class RemoteTransferRoute extends StatelessWidget {
   const RemoteTransferRoute({Key? key}) : super(key: key);
@@ -43,26 +47,7 @@ class RemoteHandler extends State<RemoteTransfer> {
           Row(
             children: [
               ElevatedButton(
-                onPressed: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-                  if (result == null) {
-                    return;
-                  }
-                  final file = result.files.first;
-                  String uri = "http://10.0.2.2:8000/api/files/aaaa/";
-                  final SharedPreferences sharedPreferences =
-                      await SharedPreferences.getInstance();
-                  var user1 = sharedPreferences.getString("jwt");
-                  var data = {"user1": user1};
-                  var response = await post(Uri.parse(uri),
-                      headers: {"Content-Type": "application/json"},
-                      body: jsonEncode(data),
-                      encoding: Encoding.getByName("utf-8"));
-
-                  print(file);
-                  print(response.body);
-                },
+                onPressed: transferFile,
                 child: const Text("Start Transfer"),
                 style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
@@ -73,5 +58,34 @@ class RemoteHandler extends State<RemoteTransfer> {
         ],
       ),
     );
+  }
+
+  void transferFile() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.any, withReadStream: true);
+    if (result == null) {
+      return;
+    }
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    const receiver = "shadie";
+    final userToken = preferences.getString("jwt");
+    final file = result.files.first;
+    final filePath = file.path;
+    final mimeType = lookupMimeType(filePath.toString());
+    final contentType = MediaType.parse(mimeType.toString());
+    final fileReadStream = file.readStream;
+    final size = file.size;
+    final fileName = file.name;
+    final stream = http.ByteStream(fileReadStream!);
+    final multiPartFile = http.MultipartFile('file', stream, size,
+        filename: fileName, contentType: contentType);
+    const uri = "http://10.0.2.2:8000/api/files/aaaa/";
+    final request = http.MultipartRequest("POST", Uri.parse(uri));
+    request.files.add(multiPartFile);
+    request.fields.addAll(
+        {"fileName": fileName, "token": userToken!, "receiver": receiver});
+    final httpClient = http.Client();
+    final response = await httpClient.send(request);
+    print(response);
   }
 }

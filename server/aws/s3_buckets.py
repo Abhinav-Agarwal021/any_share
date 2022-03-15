@@ -22,7 +22,7 @@ def upload_file(bucket_name,file_path):
     return s3_url
 
 # s3_url = upload_file("any-share","test.txt")
-s3_url = upload_file("any-share","waifu.jpg")
+# s3_url = upload_file("any-share","waifu.jpg")
 
 
 # Note that these are not publically accessible right now. Only the AWS account owner can view it. 
@@ -31,5 +31,4 @@ s3_url = upload_file("any-share","waifu.jpg")
 
 # https://any-share.s3.amazonaws.com/waifu.jpg
 # https://any-share.s3.amazonaws.com/test.txt
-print(s3_url)
 
