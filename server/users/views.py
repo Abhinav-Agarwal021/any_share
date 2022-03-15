@@ -2,8 +2,11 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from .serializers import UserSerializer
 from .models import User
+from aws import s3_buckets
 import jwt
 import datetime
 import environ
@@ -84,8 +87,15 @@ class LogoutView(APIView):
 
 class FileView(APIView):
     def post(self,request,key):
-        print("POST")
         jwt_secret = env("jwt_secret")
-        token = request.data['user1']
-        user1 = jwt.decode(token,key=jwt_secret,algorithms=["HS256"])
+        data = request.data
+        fileName = request.data['fileName']
+        authToken = request.data['token']
+        fileReceiver = request.data['receiver']
+        sender = jwt.decode(authToken,key=jwt_secret,algorithms=["HS256"])['username']
+        fileData = data['file'].read()
+        print(fileName,fileReceiver,sender)
+        pth = default_storage.save(f'files/{fileName}',ContentFile(fileData))
+        # token = request.data['user1']
+        # user1 = jwt.decode(token,key=jwt_secret,algorithms=["HS256"])
         return HttpResponse("aaaa")

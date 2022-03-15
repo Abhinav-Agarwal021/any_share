@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -11,3 +12,9 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+class File(models.Model):
+    sender = models.TextField(unique=True)
+    receiver = models.TextField(unique=True)
+    sendingtime = models.DateTimeField(unique=True)
+    url = models.TextField(unique=True)
