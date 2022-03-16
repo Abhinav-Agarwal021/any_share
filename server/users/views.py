@@ -4,12 +4,14 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.db import connection
 from .serializers import UserSerializer
 from .models import User
 from aws import s3_buckets
 import jwt
 import datetime
 import environ
+from .models import User
 env = environ.Env()
 environ.Env.read_env()
 
@@ -73,7 +75,6 @@ class UserView(APIView):
 
         except Exception:
             return Response("Invalid")
-        
 
 
 class LogoutView(APIView):
@@ -96,6 +97,15 @@ class FileView(APIView):
         fileData = data['file'].read()
         print(fileName,fileReceiver,sender)
         pth = default_storage.save(f'files/{fileName}',ContentFile(fileData))
-        # token = request.data['user1']
-        # user1 = jwt.decode(token,key=jwt_secret,algorithms=["HS256"])
+        s3_buckets.upload_file("any-share",pth)
+
         return HttpResponse("aaaa")
+
+class UserFilterView(APIView):
+    def get(self,request,username):
+        cursor = connection.cursor()
+        user = User.objects.filter(name=username)
+        if(user.count()>0):
+            return HttpResponse(1)
+        else:
+            return HttpResponse(0)
