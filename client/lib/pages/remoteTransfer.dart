@@ -7,6 +7,7 @@ import 'package:file/file.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RemoteTransferRoute extends StatelessWidget {
   const RemoteTransferRoute({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class RemoteHandler extends State<RemoteTransfer> {
   final _receiverController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   var receiver = "";
+  var receiverName = "invalid";
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -77,43 +79,50 @@ class RemoteHandler extends State<RemoteTransfer> {
     var response = await http.get(Uri.parse(uri));
     if (response.body == "1") {
       setState(() {
+        receiverName = username;
         receiver = "Transfer a file to $username";
       });
-      print("Valid user");
     } else if (response.body == "0") {
       setState(() {
         receiver = "Invalid user, $username";
+        receiverName = "invalid";
       });
-      print("Invalid user");
     }
   }
 
   void transferFile() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.any, withReadStream: true);
-    if (result == null) {
-      return;
+    var receiver = receiverName;
+    if (receiver != "invalid") {
+      FilePickerResult? result = await FilePicker.platform
+          .pickFiles(type: FileType.any, withReadStream: true);
+      if (result == null) {
+        return;
+      }
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
+      final userToken = preferences.getString("jwt");
+      final file = result.files.first;
+      final filePath = file.path;
+      final mimeType = lookupMimeType(filePath.toString());
+      final contentType = MediaType.parse(mimeType.toString());
+      final fileReadStream = file.readStream;
+      final size = file.size;
+      final fileName = file.name;
+      final stream = http.ByteStream(fileReadStream!);
+      final multiPartFile = http.MultipartFile('file', stream, size,
+          filename: fileName, contentType: contentType);
+      const uri = "http://10.0.2.2:8000/api/files/aaaa/";
+      final request = http.MultipartRequest("POST", Uri.parse(uri));
+      request.files.add(multiPartFile);
+      request.fields.addAll(
+          {"fileName": fileName, "token": userToken!, "receiver": receiver});
+      final httpClient = http.Client();
+      final response = await httpClient.send(request);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Cannot send file to invalid user ",
+          textColor: Colors.white,
+          backgroundColor: Colors.blue);
     }
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    const receiver = "shadie";
-    final userToken = preferences.getString("jwt");
-    final file = result.files.first;
-    final filePath = file.path;
-    final mimeType = lookupMimeType(filePath.toString());
-    final contentType = MediaType.parse(mimeType.toString());
-    final fileReadStream = file.readStream;
-    final size = file.size;
-    final fileName = file.name;
-    final stream = http.ByteStream(fileReadStream!);
-    final multiPartFile = http.MultipartFile('file', stream, size,
-        filename: fileName, contentType: contentType);
-    const uri = "http://10.0.2.2:8000/api/files/aaaa/";
-    final request = http.MultipartRequest("POST", Uri.parse(uri));
-    request.files.add(multiPartFile);
-    request.fields.addAll(
-        {"fileName": fileName, "token": userToken!, "receiver": receiver});
-    final httpClient = http.Client();
-    final response = await httpClient.send(request);
-    print(response);
   }
 }

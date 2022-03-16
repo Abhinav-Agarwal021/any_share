@@ -18,9 +18,7 @@ def upload_file(bucket_name,file_path):
     file_dir,file_name = os.path.split(file_path)
     bucket = s3_res.Bucket(bucket_name)
     bucket.upload_file(Filename=file_path,Key=file_name)
-    print(file_name)
     s3_url = f"https://{bucket_name}.s3.amazonaws.com/{file_name}"
-    print(s3_url)
     return s3_url
 
 # s3_url = upload_file("any-share","test.txt")

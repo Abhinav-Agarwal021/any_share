@@ -98,7 +98,6 @@ class FileView(APIView):
         print(fileName,fileReceiver,sender)
         pth = default_storage.save(f'files/{fileName}',ContentFile(fileData))
         s3_buckets.upload_file("any-share",pth)
-
         return HttpResponse("aaaa")
 
 class UserFilterView(APIView):

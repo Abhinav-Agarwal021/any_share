@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class LocalTransferRoute extends StatelessWidget {
   const LocalTransferRoute({Key? key}) : super(key: key);
@@ -24,8 +26,27 @@ class LocalTransfer extends StatefulWidget {
 }
 
 class LocalHandler extends State<LocalTransfer> {
+  var bluetoothEnabled = false;
+  var availableDevices = [];
   @override
   Widget build(BuildContext context) {
-    return const Text("abcde");
+    return Column(
+      children: [
+        ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                primary: Colors.black),
+            onPressed: () {},
+            child: const Text("Start Bluetooth Scan")),
+        Expanded(
+            child: ListView(
+          children: [
+            for (var i = 0; i < 10; i++)
+              ElevatedButton(onPressed: () {}, child: Text("hi"))
+          ],
+        ))
+      ],
+    );
   }
 }
