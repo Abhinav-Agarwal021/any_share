@@ -32,32 +32,60 @@ class RemoteTransfer extends StatefulWidget {
 }
 
 class RemoteHandler extends State<RemoteTransfer> {
+  final _receiverController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  var receiver = "";
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              ElevatedButton(
-                  onPressed: () {},
-                  child: const Text("Searchbox to be added here"))
-            ],
-          ),
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: transferFile,
-                child: const Text("Start Transfer"),
-                style: ElevatedButton.styleFrom(
-                    shape: const CircleBorder(),
-                    fixedSize: const Size(100, 100)),
-              ),
-            ],
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        Form(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              controller: _receiverController,
+              decoration: const InputDecoration(
+                  hintText: "Search a user...",
+                  contentPadding: EdgeInsets.all(5.0)),
+            ),
+            ElevatedButton(onPressed: searchUser, child: const Text("Search"))
+          ],
+        )),
+        Text(
+          receiver,
+          style: const TextStyle(color: Colors.indigo, fontSize: 20),
+        ),
+        Container(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: ElevatedButton(
+              onPressed: transferFile,
+              child: const Text("Start transfer"),
+              style: ElevatedButton.styleFrom(
+                  primary: Colors.black,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50))),
+            )),
+      ],
     );
+  }
+
+  void searchUser() async {
+    var username = _receiverController.text;
+    var uri = "http://10.0.2.2:8000/api/users/$username/";
+    var response = await http.get(Uri.parse(uri));
+    if (response.body == "1") {
+      setState(() {
+        receiver = "Transfer a file to $username";
+      });
+      print("Valid user");
+    } else if (response.body == "0") {
+      setState(() {
+        receiver = "Invalid user, $username";
+      });
+      print("Invalid user");
+    }
   }
 
   void transferFile() async {
