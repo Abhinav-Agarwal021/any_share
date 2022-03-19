@@ -94,8 +94,8 @@ class LocalHandler extends State<LocalTransfer> {
           flutterBlue.startScan(timeout: const Duration(seconds: 5));
           var subscription = flutterBlue.scanResults.listen((results) {
             for (ScanResult r in results) {
-              // print('${r.device.name} found rssi: ${r.rssi}');
-              print(r);
+              print('${r.device.name} found rssi: ${r.rssi}');
+              // print(r);
             }
           });
           AppSettings.openBluetoothSettings();
