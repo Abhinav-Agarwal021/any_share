@@ -6,7 +6,7 @@ environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-z@vtd(bpoj^fq3yrh2t+!l%$z&h*1ph^2!)*y$hlme6$a4-^w8'
+SECRET_KEY = env('Secret_key')
 # templateDir = os.path.join("templates")
 
 DEBUG = True
@@ -119,7 +119,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     "server/",
-   
+
 ]
 AUTH_USER_MODEL = 'users.User'
 
