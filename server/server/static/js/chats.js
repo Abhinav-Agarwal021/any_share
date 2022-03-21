@@ -1,5 +1,6 @@
+const room_name ="testing";
 const msgSocket = new WebSocket(
-    `ws://${window.location.host}/ws/chats`
+    `ws://${window.location.host}/ws/chats/${room_name}/`
 )
 var txt = document.getElementById("msg");
 const send = document.getElementById("send");
@@ -56,3 +57,8 @@ msgSocket.onmessage = function(e){
     elem.innerHTML = message;
     mainCont.appendChild(elem);
 }
+
+msgSocket.send(JSON.stringify({
+    'message': "Aaaaaaaaaaaaaaaaaa",
+    'user':"Bbbbbbbbbbbbbbbbbbbbbbb"
+}));

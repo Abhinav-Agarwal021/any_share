@@ -20,12 +20,10 @@ def generateKey(user1, user2):
     print(result)
 
 
-
 def handleFileTransfer(request):
     pass
 
 
 def index(request, key):
     generateKey("shady", "shadie")
-    return render(request, "")
-
+    return render(request, "chats.html")

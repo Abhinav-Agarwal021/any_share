@@ -12,6 +12,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'name'
     REQUIRED_FIELDS = []
 
+
 class File(models.Model):
     sender = models.TextField(unique=True)
     receiver = models.TextField(unique=True)
