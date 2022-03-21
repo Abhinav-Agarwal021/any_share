@@ -33,7 +33,6 @@ class DashState extends State<DashContainer> {
   void handleLogout() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     sp.clear();
-    Navigator.pop(context);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => const SignupRoute()));
   }

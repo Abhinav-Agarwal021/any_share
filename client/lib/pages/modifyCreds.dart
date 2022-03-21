@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 class CredsRoute extends StatelessWidget {
   const CredsRoute({Key? key}) : super(key: key);
@@ -33,6 +35,7 @@ class CredsState extends State<CredsForm> {
   Widget build(BuildContext context) {
     return Form(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextFormField(
             controller: _unameCtrlr,
@@ -57,10 +60,22 @@ class CredsState extends State<CredsForm> {
           ),
           Container(
             child: ElevatedButton(
-                onPressed: () {
-                  print(_unameCtrlr.text);
-                  print(_curpassCtrlr.text);
-                  print(_newpassCtrlr.text);
+                onPressed: () async {
+                  var username = _unameCtrlr.text;
+                  var password = _curpassCtrlr.text;
+                  var newpassword = _newpassCtrlr.text;
+                  String uri = "http://10.0.2.2:8000/api/changepass/";
+                  var data = {
+                    "username": username,
+                    "password": password,
+                    "newpassword": newpassword
+                  };
+                  var response = await post(Uri.parse(uri),
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: jsonEncode(data),
+                      encoding: Encoding.getByName("utf-8"));
                 },
                 child: const Text("Submit")),
           )

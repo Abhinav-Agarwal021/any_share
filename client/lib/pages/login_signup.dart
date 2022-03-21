@@ -143,7 +143,6 @@ class SignupFormState extends State<SignupForm> {
 
       if (jsonResponse != null) {
         sharedPreferences.setString("jwt", jsonResponse['jwt']);
-        Navigator.pop(context);
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const Dashboard()));
       }
@@ -215,7 +214,6 @@ class LoginFormState extends State<LoginForm> {
 
     if (jsonResponse != null) {
       sharedPreferences.setString("jwt", jsonResponse['jwt']);
-      Navigator.pop(context);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const Dashboard()));
     }

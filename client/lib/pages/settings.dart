@@ -1,6 +1,8 @@
+import 'package:client/pages/bugs.dart';
 import 'package:client/pages/friends.dart';
 import 'package:client/pages/messages.dart';
 import 'package:client/pages/modifyCreds.dart';
+import 'package:client/pages/privacy.dart';
 import 'package:client/pages/transferHistory.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +41,14 @@ class SettingsState extends State<SettingsContainer> {
                   MaterialPageRoute(builder: (context) => const CredsRoute()));
             },
             child: const Text("Modify credentials")),
-        ElevatedButton(onPressed: () {}, child: const Text("Privacy")),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const PrivacyRoute()));
+            },
+            child: const Text("Privacy")),
         ElevatedButton(onPressed: () {}, child: const Text("Security")),
         ElevatedButton(
             onPressed: () {
@@ -49,7 +58,12 @@ class SettingsState extends State<SettingsContainer> {
                       builder: (context) => const TransferRoute()));
             },
             child: const Text("Transfer History")),
-        ElevatedButton(onPressed: () {}, child: const Text("Report Bugs"))
+        ElevatedButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const BugRoute()));
+            },
+            child: const Text("Report Bugs"))
       ],
     );
   }
