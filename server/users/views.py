@@ -13,6 +13,7 @@ import jwt
 import datetime
 import environ
 from .models import User,Bug
+from hashlib import sha256
 env = environ.Env()
 environ.Env.read_env()
 
@@ -22,6 +23,8 @@ class RegisterView(APIView):
         jwt_secret = env("jwt_secret")
         serializer = UserSerializer(data=request.data)
         print(request.data)
+        # hashedPass = sha256(request.data["password"].encode()).hexdigest()
+        # data = {"name":request.body["name"],"password":request.body["password"],"email":request.body["email"],""}
         serializer.is_valid(raise_exception=True)
         serializer.save()
         response = Response()
@@ -125,3 +128,21 @@ class BugView(APIView):
         fix_status = False
         bug = Bug.objects.create(bug_id=bugId,bug_title=bugTitle,description=description,fix_status=fix_status)
         return HttpResponse("Bug reported succesfully!")
+
+class ChangePassView(APIView):
+    def post(self,request):
+        username = request.data['username']
+        password = request.data['password']
+        newPassword = request.data['newpassword']
+        print(password)
+        print(newPassword)
+        user = User.objects.filter(name=username).first()
+        valid = user.check_password(password)
+        if valid==True:
+            user.set_password(newPassword)
+            user.save()
+            print("Changed password")
+            return HttpResponse("Password changed")
+        else:
+            print("Invalid password ")
+            return HttpResponse("Invalid password")
