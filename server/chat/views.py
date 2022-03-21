@@ -12,9 +12,7 @@ def messages_page(request):
     context = {
         'Threads': threads
     }
-    return render(request, 'messages.html', context)
-
-
+    return render(request, 'chats.html', context)
 
 
 # from django.shortcuts import render
