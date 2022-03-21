@@ -1,0 +1,26 @@
+                        List of relations
+ Schema |                Name                |   Type   |  Owner  
+--------+------------------------------------+----------+---------
+ public | auth_group                         | table    | rakshit
+ public | auth_group_id_seq                  | sequence | rakshit
+ public | auth_group_permissions             | table    | rakshit
+ public | auth_group_permissions_id_seq      | sequence | rakshit
+ public | auth_permission                    | table    | rakshit
+ public | auth_permission_id_seq             | sequence | rakshit
+ public | chat_message                       | table    | rakshit
+ public | chat_message_id_seq                | sequence | rakshit
+ public | django_admin_log                   | table    | rakshit
+ public | django_admin_log_id_seq            | sequence | rakshit
+ public | django_content_type                | table    | rakshit
+ public | django_content_type_id_seq         | sequence | rakshit
+ public | django_migrations                  | table    | rakshit
+ public | django_migrations_id_seq           | sequence | rakshit
+ public | django_session                     | table    | rakshit
+ public | users_user                         | table    | rakshit
+ public | users_user_groups                  | table    | rakshit
+ public | users_user_groups_id_seq           | sequence | rakshit
+ public | users_user_id_seq                  | sequence | rakshit
+ public | users_user_user_permissions        | table    | rakshit
+ public | users_user_user_permissions_id_seq | sequence | rakshit
+(21 rows)
+

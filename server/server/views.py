@@ -27,5 +27,5 @@ def handleFileTransfer(request):
 
 def index(request, key):
     generateKey("shady", "shadie")
-    return render(request, "chats.html")
+    return render(request, "")
 

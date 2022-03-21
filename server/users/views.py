@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.shortcuts import render
 from django.db import connection
 from .serializers import UserSerializer
 from .models import User
@@ -11,7 +12,7 @@ from aws import s3_buckets
 import jwt
 import datetime
 import environ
-from .models import User
+from .models import User,Bug
 env = environ.Env()
 environ.Env.read_env()
 
@@ -108,3 +109,19 @@ class UserFilterView(APIView):
             return HttpResponse(1)
         else:
             return HttpResponse(0)
+
+class BugView(APIView):
+    def get(self,request):
+        return render(request,"bugs.html")
+    def post(self,request):
+        cursor = connection.cursor()
+        query = '''SELECT COUNT(*) FROM users_bug WHERE "bug_id">0 '''
+        cursor.execute(query)
+        result = cursor.fetchall()
+        rowCount = result[0][0]
+        bugId = rowCount+1
+        description = request.data['bugDescription']
+        bugTitle = request.data['bugTitle']
+        fix_status = False
+        bug = Bug.objects.create(bug_id=bugId,bug_title=bugTitle,description=description,fix_status=fix_status)
+        return HttpResponse("Bug reported succesfully!")
